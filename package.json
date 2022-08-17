@@ -6,8 +6,10 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "start": "node dist/server.js",
-    "dev": "nodemon src/server.ts"
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:deploy": "prisma migrate deploy",
+    "dev": "nodemon src/server.ts",
+    "start": "npm run prisma:deploy && node dist/src/server.js"
   },
   "keywords": [
     "twivent-backend"
