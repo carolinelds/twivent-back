@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import * as bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import errorResponses from "./../responses/errorResponses.js";
 import authUtils from "./../utils/authUtils.js";
@@ -12,19 +12,20 @@ async function createUser(email: string, password: string, confirmPassword: stri
     const existingEmail = await authRepository.findUserByEmail(email);
     if (existingEmail){
         return errorResponses.conflict("Email");
-    }
-    
+    };
+
     if (password !== confirmPassword){
         return errorResponses.unprocessableEntity("password, inputs do not match")
-    }
-
+    };
+    
     const SALT = +process.env.BCRYPT_SALT;
+
     const hashedPassword = bcrypt.hashSync(password, SALT);
 
     const newUser : UserDataInput = {
         email,
         password: hashedPassword
-    }
+    };
     
     await authRepository.addNewUser(newUser);
 };
@@ -40,7 +41,7 @@ async function login(email: string, password: string){
     const jwtKey = process.env.JWT_SECRET;
     const token = jwt.sign({ idUser: user.id }, jwtKey);
 
-    return token;
+    return { token, email };
 };
 
 const authServices = {

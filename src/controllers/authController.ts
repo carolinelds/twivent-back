@@ -12,8 +12,8 @@ export async function createUser(req: Request, res: Response){
 export async function login(req: Request, res: Response){
     const { email, password } : { email: string, password: string} = res.locals.body;
 
-    const token = await authServices.login(email, password);
+    const userData = await authServices.login(email, password);
 
-    res.status(200).send(token);
+    res.status(200).send(userData);
 };
 
